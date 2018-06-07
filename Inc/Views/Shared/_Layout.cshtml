@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=11,chrome=1" />
+    <title>Incident Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Styles/Kendo/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/Styles/Kendo/kendo.metro.min.css" rel="stylesheet" />
+    <link href="~/Content/Styles/Kendo/kendo.dataviz.min.css" rel="stylesheet" />
+    <link href="~/Content/Styles/Kendo/kendo.dataviz.metro.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/kendo.all.min.js"></script>
+    @RenderSection("masterjs", required: false)
+    <script src="https://kendo.cdn.telerik.com/2015.3.1111/js/kendo.aspnetmvc.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/kendo.modernizr.custom.js"></script>
+    <link rel="stylesheet" href="~/Content/Styles/Kendo/kendo.common.min.css" />
+    <link href="~/Content/kendo/2018.1.221/kendo.default.mobile.min.css" rel="stylesheet" />
+    <link href="~/Content/kendo/2018.1.221/kendo.default.min.css" rel="stylesheet" />
+    <script src="~/scripts/jquery.min.js"></script>
+    <script src="~/scripts/kendo.all.min.js"></script>
+    <script src="http://malsup.github.io/jquery.blockUI.js" type="text/javascript"></script>
+   
+</head>
+<body>
+    <div class="container-fluid">
+        <!--open container-->
+        <div class="row row-offcanvas row-offcanvas-left">
+            <!--open row-->
+            <div id="nav-section" class="col-xs-12 column">
+                <!--open nav column-->
+                <div class="navbar-default">
+                    <button id="toggle-button" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <h1 id="dash-logo" class="center-block">Incident Report</h1>
+                <div class="collapse navbar-collapse" id="sidebar-nav" role="navigation">
+                    <ul class="nav">
+                        <li id="liIncidents"><a href="@(Url.Action("Index", "Main"))"><span class="icon icon-chart-column"></span>Incidents</a></li>
+                        <li id="liReports"><a href="@(Url.Action("RegionalSalesStatus", "Home"))"><span class="icon icon-chart-column"></span>Reports</a></li>
+                        <li id="liAdmin"><a href="@(Url.Action("Index", "Admin"))"><span class="icon icon-star-empty"></span>Admin</a></li>
+                        <li id="liLogout"><a href="" onclick="$('#signoutfrm').submit(); return false;"><span class="icon icon-star-empty"></span>LOGOUT</a></li>
+                    </ul>
+                    <div id="rights">
+                        <p>Copyright &copy; @DateTime.Now.Year, OMH and/or its subsidiaries or affiliates. All Rights Reserved.</p>
+                    </div>
+                </div>
+                <div>
+                    <form method="post" action="@Url.Action("Logout", "Account")" id="signoutfrm" style="display:none;">
+                        @Html.AntiForgeryToken()    
+                    </form>
+                </div>
+            </div><!--close left column-->
+            <div id="main-section" class="col-xs-12 column">
+                <!--open main column-->
+                @RenderBody()
+            </div><!--close main column-->
+        </div><!--close row-->
+    </div><!--close container-->
+    @*<script>
+        $(document).ready(function () {
+            $('[data-toggle=offcanvas]').click(function () {
+                $('.row-offcanvas').toggleClass('active');
+            });
+        });
+    </script>*@
+</body>
+</html>

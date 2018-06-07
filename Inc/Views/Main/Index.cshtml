@@ -1,0 +1,256 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Incidents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section masterjs
+{
+    <script src="~/Scripts/app/main_index.js"></script>
+
+}
+<style>
+    .form-group label {
+        font-size: 9px;
+    }
+
+    #tblForm td label {
+        display: block;
+        font-size: 10px;
+    }
+</style>
+
+<style scoped>
+    .armchair {
+        overflow: auto;
+        height: calc(100% - 90px);
+        padding: 10px;
+    }
+
+    .window-footer {
+        position: absolute;
+        bottom: 0;
+        display: block;
+        width: 95%;
+        margin-top: 150px;
+        padding: 19px 0 20px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    #grid {
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+        height: 100%; /* DO NOT USE !important for setting the Grid height! */
+    }
+</style>
+<ul id="context-menu" style="display:none;"></ul>
+<ul id="context-menu-MFScripts" style="display:none;"></ul>
+
+<div id="products-orders-main-content" class="main-section-content">
+    <div id="grid"></div>
+    <div id="window"></div>
+    <div id="windowequipment"></div>
+    <div id="windowPOI"></div>
+</div>
+<script id="POI" type="text/x-kendo-template">
+    <div id="divPOI">
+        <div class="form-group">
+            <table id="tblFormPOI" style="width:100%; border-collapse:separate; border-spacing:1em;">
+                <tr>
+
+                    <td><label for="simple-input"><span style="color:red ;font-weight:bold;font-size:larger">*</span> Person Of Interest Type</label><input id="comboPOIType" /></td>
+                    <td><label for="simple-input">Comments</label><input type="text" id="txtComments" class="k-textbox" value="#=typeof Comments == 'undefined' ? '': Comments #" /></td>
+                    <td><label for="simple-imput">POI AKA</label><input type="text" required="required" id="txtPOIAKA" class="k-textbox" name="txtPOILastName" value="#=typeof data.Person == 'undefined' ?  '': Person.AKA #" /></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input"><span style="color:red ;font-weight:bold;font-size:larger">*</span> POI Last Name</label><input type="text" required="required" id="txtPOILastName" class="k-textbox" name="txtPOILastName" value="#=typeof data.Person == 'undefined' ?  '': Person.Last_Name #" /></td>
+                    <td><label for="simple-input"><span style="color:red ;font-weight:bold;font-size:larger">*</span> POI First Name</label><input type="text" required="required" id="txtPOIFirstName" class="k-textbox" name="txtPOIFirstName" value="#=typeof data.Person == 'undefined' ?  '': Person.First_Name #" /></td>
+                    <td><label for="simple-input">POI Middle Name</label><input type="text" required="required" id="txtPOIMiddleName" class="k-textbox" name="txtPOIMiddleName" value="#=typeof data.Person == 'undefined' ?  '': Person.Middle_Name #" /></td>
+                    <td><label for="simple-input">POI Date of Birth</label><input id="dtPOIDOB" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input"><span style="color:red ;font-weight:bold;font-size:larger">*</span> Gender</label><input id="comboPOIGender" /></td>
+                    <td><label for="simple-input">Street</label><input type="text" required="required" id="txtPOIStreet" class="k-textbox" name="txtPOIStreet" value="#=typeof data.Person == 'undefined' ? '': Person.Street #" /></td>
+                    <td><label for="simple-input">State</label><input type="text" required="required" id="txtPOIState" class="k-textbox" name="txtPOIState" value="#=typeof data.Person == 'undefined' ? '': Person.State #" /></td>
+                    <td><label for="simple-input">City</label><input type="text" required="required" id="txtPOICity" class="k-textbox" name="txtPOICity" value="#=typeof data.Person == 'undefined' ? '': Person.City #" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input">Zip Code</label><input type="text" required="required" id="txtPOIZip" class="k-textbox" name="txtPOIZip" value="#=typeof data.Person == 'undefined' ? '': Person.Zip #" /></td>
+                    <td><label for="simple-input">Home Number</label><input type="text" required="required" id="txtPOIHome" class="k-textbox" name="txtPOIHome" value="#=typeof data.Person == 'undefined' ? '': Person.Home_Number #" /></td>
+                    <td><label for="simple-input">Mobile Number</label><input type="text" required="required" id="txtPOIMobile" class="k-textbox" name="txtPOIMobile" value="#=typeof data.Person == 'undefined' ? '': Person.Mobile_Number #" /></td>
+                    <td><label for="simple-input">Other Number</label><input type="text" required="required" id="txtPOIOther" class="k-textbox" name="txtPOIOther" value="#=typeof data.Person == 'undefined' ? '': Person.Other_Number #" /></td>
+                </tr>
+            </table>
+            <div>
+                <input name="files" id="filePOI" type="file" aria-label="files" />
+                <div class="demo-hint">You can only upload <strong>GIF</strong>, <strong>JPG</strong>, <strong>PNG</strong> files.</div>
+            </div>
+            <div>
+                <div id="gridPicturesPOI"></div>
+            </div>
+
+            <div class="window-footer">
+                <button type="button" id="btn_POI_Cancel" class="k-primary k-button">Cancel</button>
+                <button type="button" id="btn_Save_POI" class="k-primary k-button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="equipment" type="text/x-kendo-template">
+    <div id="divEqupimentForm">
+        <div class="form-group">
+            <table id="tblForm" style="width:100%; border-collapse:separate; border-spacing:1em;">
+                <tr>
+                    <td><label for="simple-input"><span style="color:red">*</span> Equipment Status</label></td>
+                    <td><input id="comboEquipmentStatus" /></td>
+
+                </tr>
+                <tr>
+                    <td><label for="simple-input">Equipment Type</label></td>
+                    <td><input id="comboEquipmentType" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input">Equipment Value</label></td>
+                    <td><input id="txtValue" type="text" value="#=typeof Value == 'undefined' ? '': Value #" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input"><span style="color:red">*</span> Incident/Occurance Date</label></td>
+                    <td><input id="dtOcc" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input">Description</label></td>
+                    <td><input type="text" id="txtDesc" value="#=typeof Description == 'undefined' ? '': Description #" /></td>
+                </tr>
+            </table>
+            <div>
+                <input name="files" id="fileEquipment" type="file" aria-label="files" />
+                <div class="demo-hint">You can only upload <strong>GIF</strong>, <strong>JPG</strong>, <strong>PNG</strong> files.</div>
+            </div>
+            <div>
+                <div id="gridFileUpload"></div>
+            </div>
+        </div>
+        <div class="window-footer">
+            <button type="button" id="btn_Equ_Cancel" class="k-button k-button">Cancel</button>
+            <button type="button" id="btn_Save_Equipment" class="k-primary k-button">Save changes</button>
+        </div>
+    </div>
+</script>
+<script id="password-validation" type="text/x-kendo-template">
+    <div id="divIncidentForm">
+        <div class="form-group">
+            <table id="tblForm" style="width:100%; border-collapse:separate; border-spacing:1em;">
+                <tr>
+                    <td> <label for="simple-input"><span style="color:red;font-weight:bold">*</span> Incident Type</label><input id="comboIncidents" /></td>
+                    <td><label for="simple-input"><span style="color:red;font-weight:bold">*</span> Report Date</label><input id="dtCreate" /></td>
+                    <td><label for="simple-input"><span style="color:red;font-weight:bold">*</span> Incident/Occurance Date</label><input id="dtOccurance" /></td>
+                    <td><label for="simple-input"><span style="color:red;font-weight:bold">*</span> Incident Location</label><input id="comboLocation" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input"><span style="color:red;font-weight:bold">*</span> Complainant Last Name</label><input type="text" required="required" id="txtComplainantLastName" class="k-textbox" name="txtComplainantLastName" value="#=typeof data.Complainant == 'undefined' ?  '': Complainant.Last_Name #" /></td>
+                    <td><label for="simple-input"><span style="color:red;font-weight:bold">*</span> Complainant First Name</label><input type="text" required="required" id="txtComplainantFirstName" class="k-textbox" name="txtComplainantFirstName" value="#=typeof data.Complainant == 'undefined' ?  '': Complainant.First_Name #" /></td>
+                    <td><label for="simple-input">Complainant Middle Name</label><input type="text" required="required" id="txtComplainantMiddleName" class="k-textbox" name="txtComplainantMiddleName" value="#=typeof data.Complainant == 'undefined' ?  '': Complainant.Middle_Name #" /></td>
+                    <td><label for="simple-input">Complainant Date of Birth</label><input id="dtDOB" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input">Gender</label><input id="comboGender" /></td>
+                    <td><label for="simple-input">Street</label><input type="text" required="required" id="txtStreet" class="k-textbox" name="txtStreet" value="#=typeof data.Complainant == 'undefined' ? '': Complainant.Street #" /></td>
+                    <td><label for="simple-input">State</label><input type="text" required="required" id="txtState" class="k-textbox" name="txtState" value="#=typeof data.Complainant == 'undefined' ? '': Complainant.State #" /></td>
+                    <td><label for="simple-input">City</label><input type="text" required="required" id="txtCity" class="k-textbox" name="txtCity" value="#=typeof data.Complainant == 'undefined' ? '': Complainant.City #" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input">Zip Code</label><input type="text" required="required" id="txtZip" class="k-textbox" name="txtZip" value="#=typeof data.Complainant == 'undefined' ? '': Complainant.Zip #" /></td>
+                    <td><label for="simple-input">Home Number</label><input type="text" required="required" id="txtHome" class="k-textbox" name="txtHome" value="#=typeof data.Complainant == 'undefined' ? '': Complainant.Home_Number #" /></td>
+                    <td><label for="simple-input">Mobile Number</label><input type="text" required="required" id="txtMobile" class="k-textbox" name="txtMobile" value="#=typeof data.Complainant == 'undefined' ? '': Complainant.Mobile_Number #" /></td>
+                    <td><label for="simple-input">Other Number</label><input type="text" required="required" id="txtOther" class="k-textbox" name="txtOther" value="#=typeof data.Complainant == 'undefined' ? '': Complainant.Other_Number #" /></td>
+                </tr>
+                <tr>
+                    <td><label for="simple-input"><span style="color:red;font-weight:bold">*</span> BE Number</label><input type="text" required="required" id="txtBENumber" class="k-textbox" name="txtBENumber" value="#= data.Be_Id == null ? '': data.Be_Id #" /></td>
+                    <td><label for="simple-input"><span style="color:red;font-weight:bold">*</span> Disposition</label><input id="comboDisposition" /></td>
+                    <td><label for="simple-input"><span style="color:red;font-weight:bold">*</span> Report Written By</label><input id="comboReportWrittenBy" /></td>
+                    <td><label for="simple-input">Report Reviewed By</label><input id="comboReportReviewedBy" /></td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id="tabstrip">
+            <ul>
+                <li id="tab2" class="k-state-active"><span style="color:red;font-weight:bold">*</span> Narrative</li>
+                <li id="tab1">Equipment/POI</li>
+            </ul>
+            <div>
+                <div>
+                  <textarea id="editor" rows="10" cols="30" style="height:10px" aria-label="editor">#=typeof Narrative == "undefined" ?  "": Narrative#</textarea>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <button type="button" id="btn_Add_Equipment" class="k-primary k-button">Add Equipment</button>
+                    <button type="button" id="btn_Add_POI" class="k-primary k-button">Add Person Of Interest</button>
+                </div>
+                <div>
+                    <div id="gridSuspects"></div>
+                </div>
+                <div style="padding-top:10px;">
+                    <div id="gridItems"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btnCancel" class="k-button k-button">Cancel</button>
+        <button type="button" id="btn_Save_Changes" class="k-primary k-button">Save changes</button>      
+        <button type="button" id="btn_Print" class="k-primary k-button">Print</button>
+    </div>
+</script>
+
+<script type="text/x-kendo-template" id="template">
+    <div class="refreshBtnContainer">
+        <a href="\\#" class="k-pager-refresh k-link k-button" title="Refresh"><span class="k-icon k-i-reload"></span></a>
+    </div>
+    <div class="toolbar">
+        <input type="button" id="btn_New_Complaint" value="Lodge New Complaint" class="k-primary k-button" />
+    </div>
+</script>
+<script type="text/x-kendo-template" id="storeTerritory">
+    <div class="tooltipcontent">
+        #if (Photo)  {#
+        <img src="#=Photo#" alt="" />
+        #} else{#
+        <img src="https://cdn4.iconfinder.com/data/icons/website-kit-2/600/547756-Cross-128.png" alt="" />
+        #}#
+    </div>
+</script>
+
+<script>
+    var comboDatastore = {
+        dataGender:@Html.Raw(Json.Encode(Model.Gender)),
+        dataDisposition:@Html.Raw(Json.Encode(Model.Disposition)),
+        dataIncidentType: @Html.Raw(Json.Encode(Model.IncidentType)),
+        dataLocation: @Html.Raw(Json.Encode(Model.Location)),
+        dataWritten_By: @Html.Raw(Json.Encode(Model.Report_Written_By)),
+        dataReport_Reviewed_By: @Html.Raw(Json.Encode(Model.Report_Reviewed_By)),
+        dataEquipmentType: @Html.Raw(Json.Encode(Model.EquipmentType)),
+        dataEquipmentStatus: @Html.Raw(Json.Encode(Model.EquipmentStatus)),
+        dataPOIType: @Html.Raw(Json.Encode(Model.POIType))
+    };
+    var url_GetIncidents = '@Url.Action("GetIncident", "Main")';
+    var url_ConvertB64 = '@Url.Action("ConvertToB64", "Main")';
+    var url_RemoveImage = '@Url.Action("RemoveImage", "Main")';
+    var url_GetMaingridComplaint = '@Url.Action("GetMaingridIncident", "Main")';
+    var url_GetComplaint = '@Url.Action("GetIncident", "Main")';
+    var url_GetReport = '@Url.Action("PrintReport", "Reports")';
+    var url_InsertComplaint = '@Url.Action("NewComplaint", "Main")';
+</script>
+
+
+
+
+
+

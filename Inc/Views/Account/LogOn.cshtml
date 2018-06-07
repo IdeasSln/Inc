@@ -1,0 +1,40 @@
+﻿@model  Incidents.Models.Credentials
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Please Log On</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/Content/Styles/logon.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <img src="~/Content/Images/creedmoor_header2.jpg" />
+    </div>
+     <div class="container">
+        <div class="card card-container">
+        <h2 class='login_title text-center'>Login</h2>
+        <hr>
+            @using (Html.BeginForm("logon", "account", new { returnUrl = Request.QueryString["ReturnUrl"] }, FormMethod.Post, new { @class = "form-signin", @id = "logonform", data_href = "/Account/Logon" }))
+            {
+                <span id="reauth-email" class="reauth-email"></span>
+                <p class="input_title">User Name</p>
+                @Html.TextBoxFor(m => m.UserName, new { @class = "login_box", autofocus = "autofocus" , required="required"})
+                <p class="input_title">Password</p>
+                @Html.PasswordFor(m => m.Password, new { @class = "login_box", required = "required", placeholder = "******" })
+                @Html.HiddenFor(m => ViewBag.ReturnUrl)
+                <button class="btn btn-lg btn-primary" type="submit">Login</button>
+                <div>
+                    @Html.ValidationSummary(true)
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
