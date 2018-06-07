@@ -1155,7 +1155,7 @@ namespace Inc
             SqlConnection cnn = new SqlConnection(strCRMARConnectionString);
             
                 cnn.Open();
-                string strQuery = "select lname = cmp.be_id, cmp.id,format(cmp.report_date,'mm/dd/yyyy hh:mm','en-us') as [report_date],format(cmp.incident_occurance_date,'mm/dd/yy hh:mm','en-us') as [incident_occurance_date],cmp.narrative,disp.description as [DispDesc], " +
+                string strQuery = "select cmp.be_id, cmp.id,format(cmp.report_date,'mm/dd/yyyy hh:mm','en-us') as [report_date],format(cmp.incident_occurance_date,'mm/dd/yy hh:mm','en-us') as [incident_occurance_date],cmp.narrative,disp.description as [DispDesc], " +
                     "incloc.description as [LocDesc],inctype.description as [TypeDesc],writby.description as [WritDesc],revby.description as [RevDesc], " +
                     "p.gender_id,p.last_name,p.first_name,p.middle_name,p.dob,p.street,p.city,p.state,p.zip,p.home_number,p.mobile_number,p.other_number, " +
                     "incgender.description as [GendDesc],eq.Id,eq.complaint_id, eq.value,eq.occurance_date,eq.description as  [EquipDesc],eqst.Description as [StatusDesc]," +

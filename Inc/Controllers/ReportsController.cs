@@ -18,7 +18,8 @@ namespace Inc.Controllers
             DataSet dtReport = SQLFUNC.GetIncidentReport(RptId);
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(Server.MapPath("~/ProjectReports"), "EquipmentReport.rpt"));
-            rd.SetDataSource(dtReport);
+            rd.SetDataSource(dtReport.Tables[0]);
+            //rd.SetDataSource(dtReport.Tables[1]);
             Response.Buffer = false;
             Response.ClearContent();
             Response.ClearHeaders();
