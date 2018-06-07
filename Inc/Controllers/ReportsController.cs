@@ -15,7 +15,7 @@ namespace Inc.Controllers
         {
 
 
-            DataTable dtReport = SQLFUNC.GetIncidentReport(RptId);
+            DataSet dtReport = SQLFUNC.GetIncidentReport(RptId);
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(Server.MapPath("~/ProjectReports"), "EquipmentReport.rpt"));
             rd.SetDataSource(dtReport);
@@ -41,7 +41,7 @@ namespace Inc.Controllers
 
         private FileStreamResult PrintEqReport(int rptId)
         {
-            DataTable dtReport = SQLFUNC.GetIncidentReport(rptId);
+            DataSet dtReport = SQLFUNC.GetIncidentReport(rptId);
             ReportDocument rd = new ReportDocument();
             rd.Load(Path.Combine(Server.MapPath("~/ProjectReports"), "EquipmentReport.rpt"));
             rd.SetDataSource(dtReport);

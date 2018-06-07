@@ -1159,7 +1159,7 @@ namespace Inc
                     "incloc.description as [LocDesc],inctype.description as [TypeDesc],writby.description as [WritDesc],revby.description as [RevDesc], " +
                     "p.gender_id,p.last_name,p.first_name,p.middle_name,p.dob,p.street,p.city,p.state,p.zip,p.home_number,p.mobile_number,p.other_number, " +
                     "incgender.description as [GendDesc],eq.Id,eq.complaint_id, eq.value,eq.occurance_date,eq.description as  [EquipDesc],eqst.Description as [StatusDesc]," +
-                   "eqtp.description as [EqTypeDesc],eqph.equipment_id,eqph.photo,eqph.Description as [PhDesc],poi.person_id,poi.complaint_id from incident_complaints cmp inner join incident_person p on cmp.complainant_id = p.id " +
+                   "eqtp.description as [EqTypeDesc],eqph.equipment_id,eqph.photo,eqph.Description as [PhDesc] from incident_complaints cmp inner join incident_person p on cmp.complainant_id = p.id " +
                    "left outer join incident_equipments eq on eq.complaint_id = cmp.id " +
                    "left outer join incident_equipment_type eqtp on eq.type_id = eqtp.id " +
                    " left outer join incident_equipment_status eqst on eq.status_id = eqst.id "+
@@ -1175,7 +1175,7 @@ namespace Inc
                 DataSet dsReport = new DataSet();
                SqlDataAdapter da = new SqlDataAdapter(cmd);         
               da.Fill(dsReport,"Complaints");
-            strQuery = "select p.last_name,p.first_name,p.middle_name  from incident.person p inner join incident_person_of_interest poi on poi.person_id = p.id where poi.complaint_id = " + CmpId + "";
+            strQuery = "select p.last_name,p.first_name,p.middle_name  from incident_person p inner join incident_person_of_interest poi on poi.person_id = p.id where poi.complaint_id = " + CmpId + "";
             cmd = new SqlCommand(strQuery, cnn);
           
             da = new SqlDataAdapter(cmd);
