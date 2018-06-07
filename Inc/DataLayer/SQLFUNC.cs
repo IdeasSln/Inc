@@ -1150,7 +1150,7 @@ namespace Inc
 
         
 
-        public static  DataSet GetIncidentReport(int  CmpId)
+        public static  DataTable GetIncidentReport(int  CmpId)
         {
             SqlConnection cnn = new SqlConnection(strCRMARConnectionString);
             
@@ -1159,11 +1159,12 @@ namespace Inc
                     "incloc.description as [LocDesc],inctype.description as [TypeDesc],writby.description as [WritDesc],revby.description as [RevDesc], " +
                     "p.gender_id,p.last_name,p.first_name,p.middle_name,p.dob,p.street,p.city,p.state,p.zip,p.home_number,p.mobile_number,p.other_number, " +
                     "incgender.description as [GendDesc],eq.Id,eq.complaint_id, eq.value,eq.occurance_date,eq.description as  [EquipDesc],eqst.Description as [StatusDesc]," +
-                   "eqtp.description as [EqTypeDesc],eqph.equipment_id,eqph.photo,eqph.Description as [PhDesc] from incident_complaints cmp inner join incident_person p on cmp.complainant_id = p.id " +
+                   "eqtp.description as [EqTypeDesc],eqph.equipment_id,eqph.photo,eqph.Description as [PhDesc] "+                 
+                   "from incident_complaints cmp inner join incident_person p on cmp.complainant_id = p.id " +
                    "left outer join incident_equipments eq on eq.complaint_id = cmp.id " +
                    "left outer join incident_equipment_type eqtp on eq.type_id = eqtp.id " +
-                   " left outer join incident_equipment_status eqst on eq.status_id = eqst.id "+
-                  "left outer join  incident_equipment_photo eqph on eq.id = eqph.equipment_id "+ 
+                   " left outer join incident_equipment_status eqst on eq.status_id = eqst.id "+               
+                   " left outer join  incident_equipment_photo eqph on eq.id = eqph.equipment_id "+ 
                     "left outer join incident_disposition disp on cmp.disposition_id = disp.id " +
                     "left outer join incident_gender incgender on p.gender_id = incgender.id " +
                     "left outer join incident_location incloc on cmp.incident_location_id = incloc.id " +
@@ -1172,14 +1173,10 @@ namespace Inc
                     "left outer join incident_report_written_by writby on cmp.report_written_by_id = writby.id  " +
                     "where cmp.id = " + CmpId + "";
                 SqlCommand cmd = new SqlCommand(strQuery, cnn);
-                DataSet dsReport = new DataSet();
+                DataTable Reportdt = new DataTable();
                SqlDataAdapter da = new SqlDataAdapter(cmd);         
-              da.Fill(dsReport,"Complaints");
-            strQuery = "select p.last_name,p.first_name,p.middle_name  from incident_person p inner join incident_person_of_interest poi on poi.person_id = p.id where poi.complaint_id = " + CmpId + "";
-            cmd = new SqlCommand(strQuery, cnn);
+              da.Fill(Reportdt);
           
-            da = new SqlDataAdapter(cmd);
-            da.Fill(dsReport, "POI");
             //foreach (DataRow dr in dtreport.Rows)
             //{
             //    string base64string = dr["Photo"].ToString().Remove(0,27);
@@ -1201,7 +1198,7 @@ namespace Inc
 
             //}
 
-            return dsReport;         
+            return Reportdt;         
 
       }
 

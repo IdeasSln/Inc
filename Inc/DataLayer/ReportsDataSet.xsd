@@ -50,13 +50,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="POI" msprop:Generator_TableClassName="POIDataTable" msprop:Generator_TableVarName="tablePOI" msprop:Generator_TablePropName="POI" msprop:Generator_RowDeletingName="POIRowDeleting" msprop:Generator_RowChangingName="POIRowChanging" msprop:Generator_RowEvHandlerName="POIRowChangeEventHandler" msprop:Generator_RowDeletedName="POIRowDeleted" msprop:Generator_UserTableName="POI" msprop:Generator_RowChangedName="POIRowChanged" msprop:Generator_RowEvArgName="POIRowChangeEvent" msprop:Generator_RowClassName="POIRow">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Last_Name" msprop:Generator_ColumnVarNameInTable="columnLast_Name" msprop:Generator_ColumnPropNameInRow="Last_Name" msprop:Generator_ColumnPropNameInTable="Last_NameColumn" msprop:Generator_UserColumnName="Last_Name" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>
