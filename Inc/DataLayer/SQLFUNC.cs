@@ -1150,22 +1150,20 @@ namespace Inc
 
         
 
-        public static  DataTable GetIncidentReport(int  CmpId)
+        public static  DataSet GetIncidentReport(int  CmpId)
         {
             SqlConnection cnn = new SqlConnection(strCRMARConnectionString);
             
                 cnn.Open();
-                string strQuery = "select cmp.be_id, cmp.id,format(cmp.report_date,'mm/dd/yyyy hh:mm','en-us') as [report_date],format(cmp.incident_occurance_date,'mm/dd/yy hh:mm','en-us') as [incident_occurance_date],cmp.narrative,disp.description as [DispDesc], " +
+                string strQuery = "select lname = cmp.be_id, cmp.id,format(cmp.report_date,'mm/dd/yyyy hh:mm','en-us') as [report_date],format(cmp.incident_occurance_date,'mm/dd/yy hh:mm','en-us') as [incident_occurance_date],cmp.narrative,disp.description as [DispDesc], " +
                     "incloc.description as [LocDesc],inctype.description as [TypeDesc],writby.description as [WritDesc],revby.description as [RevDesc], " +
                     "p.gender_id,p.last_name,p.first_name,p.middle_name,p.dob,p.street,p.city,p.state,p.zip,p.home_number,p.mobile_number,p.other_number, " +
                     "incgender.description as [GendDesc],eq.Id,eq.complaint_id, eq.value,eq.occurance_date,eq.description as  [EquipDesc],eqst.Description as [StatusDesc]," +
-            "eqtp.description as [EqTypeDesc],eqph.equipment_id,eqph.photo,eqph.Description as [PhDesc],poi.person_id,poi.complaint_id,p.last_name as [lname],p.middle_name as [mname],p.first_name as [fname]  from incident_complaints cmp inner join incident_person p on cmp.complainant_id = p.id " +
-            "left outer join incident_equipments eq on eq.complaint_id = cmp.id " +
-                  "left outer join incident_equipment_type eqtp on eq.type_id = eqtp.id " +
-            " left outer join incident_equipment_status eqst on eq.status_id = eqst.id "+
-            "left outer join  incident_equipment_photo eqph on eq.id = eqph.equipment_id "+
-            " left outer join incident_person_of_interest poi on poi.person_id = p.id "+
-           
+                   "eqtp.description as [EqTypeDesc],eqph.equipment_id,eqph.photo,eqph.Description as [PhDesc],poi.person_id,poi.complaint_id from incident_complaints cmp inner join incident_person p on cmp.complainant_id = p.id " +
+                   "left outer join incident_equipments eq on eq.complaint_id = cmp.id " +
+                   "left outer join incident_equipment_type eqtp on eq.type_id = eqtp.id " +
+                   " left outer join incident_equipment_status eqst on eq.status_id = eqst.id "+
+                  "left outer join  incident_equipment_photo eqph on eq.id = eqph.equipment_id "+ 
                     "left outer join incident_disposition disp on cmp.disposition_id = disp.id " +
                     "left outer join incident_gender incgender on p.gender_id = incgender.id " +
                     "left outer join incident_location incloc on cmp.incident_location_id = incloc.id " +
@@ -1174,32 +1172,36 @@ namespace Inc
                     "left outer join incident_report_written_by writby on cmp.report_written_by_id = writby.id  " +
                     "where cmp.id = " + CmpId + "";
                 SqlCommand cmd = new SqlCommand(strQuery, cnn);
-                DataTable dtreport = new DataTable();
+                DataSet dsReport = new DataSet();
                SqlDataAdapter da = new SqlDataAdapter(cmd);         
-              da.Fill(dtreport);
+              da.Fill(dsReport,"Complaints");
+            strQuery = "select p.last_name,p.first_name,p.middle_name  from incident.person p inner join incident_person_of_interest poi on poi.person_id = p.id where poi.complaint_id = " + CmpId + "";
+            cmd = new SqlCommand(strQuery, cnn);
+          
+            da = new SqlDataAdapter(cmd);
+            da.Fill(dsReport, "POI");
+            //foreach (DataRow dr in dtreport.Rows)
+            //{
+            //    string base64string = dr["Photo"].ToString().Remove(0,27);
+            //    byte[] bytes = Convert.FromBase64String(base64string);
 
-            foreach (DataRow dr in dtreport.Rows)
-            {
-                string base64string = dr["Photo"].ToString().Remove(0,27);
-                byte[] bytes = Convert.FromBase64String(base64string);
 
-               
 
-                MemoryStream ms = new MemoryStream(bytes);
-                ms.Write(bytes, 0, bytes.Length);
-                try
-                {
-                    Image image = System.Drawing.Image.FromStream(ms, true);
-                    dr["Photo"] = image;
-                }
-                catch(ArgumentException ex)
-                {
+            //    MemoryStream ms = new MemoryStream(bytes);
+            //    ms.Write(bytes, 0, bytes.Length);
+            //    try
+            //    {
+            //        Image image = System.Drawing.Image.FromStream(ms, true);
+            //        dr["Photo"] = image;
+            //    }
+            //    catch(ArgumentException ex)
+            //    {
 
-                }
-             
-            }
+            //    }
 
-            return dtreport;         
+            //}
+
+            return dsReport;         
 
       }
 
