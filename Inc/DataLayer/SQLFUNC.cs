@@ -1179,11 +1179,11 @@ namespace Inc
 
             foreach (DataRow dr in Reportdt.Rows)
             {
-                byte[] imageBytes = Convert.FromBase64String(dr["Photo"].ToString().Remove(0,23));
+                byte[] imageBytes = Convert.FromBase64String(dr["Photo"].ToString().Remove(0, 23));
                 MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
-            ms.Write(imageBytes, 0, imageBytes.Length);
-            System.Drawing.Image img1 = System.Drawing.Image.FromStream(ms, true);
-                dr["Photo"] = img1;
+                ms.Write(imageBytes, 0, imageBytes.Length);
+                System.Drawing.Image img1 = System.Drawing.Image.FromStream(ms, true);
+                dr["Photo"] = imageBytes;
             }
 
             return Reportdt;         
