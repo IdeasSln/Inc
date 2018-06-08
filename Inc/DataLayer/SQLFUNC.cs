@@ -1176,27 +1176,15 @@ namespace Inc
                 DataTable Reportdt = new DataTable();
                SqlDataAdapter da = new SqlDataAdapter(cmd);         
               da.Fill(Reportdt);
-          
-            //foreach (DataRow dr in dtreport.Rows)
-            //{
-            //    string base64string = dr["Photo"].ToString().Remove(0,27);
-            //    byte[] bytes = Convert.FromBase64String(base64string);
 
-
-
-            //    MemoryStream ms = new MemoryStream(bytes);
-            //    ms.Write(bytes, 0, bytes.Length);
-            //    try
-            //    {
-            //        Image image = System.Drawing.Image.FromStream(ms, true);
-            //        dr["Photo"] = image;
-            //    }
-            //    catch(ArgumentException ex)
-            //    {
-
-            //    }
-
-            //}
+            foreach (DataRow dr in Reportdt.Rows)
+            {
+                byte[] imageBytes = Convert.FromBase64String(dr["Photo"].ToString().Remove(0,23));
+                MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+            ms.Write(imageBytes, 0, imageBytes.Length);
+            System.Drawing.Image img1 = System.Drawing.Image.FromStream(ms, true);
+                dr["Photo"] = img1;
+            }
 
             return Reportdt;         
 
